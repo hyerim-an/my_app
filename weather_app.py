@@ -3,16 +3,27 @@ import requests
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.font_manager as fm
 import random
 import platform
+import os
 
 # 한글 폰트 설정 - os별 자동 감지
 if platform.system() == 'Windows':
     plt.rcParams['font.family'] = 'Malgun Gothic'
 elif platform.system() == 'Darwin':  # macOS
     plt.rcParams['font.family'] = 'AppleGothic'
-else:  # Linux 및 기타 OS
-    plt.rcParams['font.family'] = 'DejaVu Sans'
+else:  # Linux 환경 (Streamlit Cloud)
+    # 리눅스 서버의 나눔 폰트 절대 경로 설정
+    noto_font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+    
+    # 폰트 파일이 존재하면 폰트 매니저에 등록
+    if os.path.exists(noto_font_path):
+        fm.fontManager.addfont(noto_font_path)
+        plt.rcParams['font.family'] = 'NanumGothic'
+    else:
+        # 폰트 파일이 없을 경우 기본 폰트 사용
+        plt.rcParams['font.family'] = 'DejaVu Sans'
 
 plt.rcParams['axes.unicode_minus'] = False  # 마이너스 기호 깨짐 방지
 
